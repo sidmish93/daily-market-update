@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Daily Market Update</title>
+  <link rel="stylesheet" href="/static/styles.css?v=5" />
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1>Daily Market Update</h1>
+      <p class="subtitle">Generate after 3:30 PM IST · Edit · Export PDF</p>
+    </div>
+    <div class="actions">
+      <button id="btnGenerate" class="btn primary">Generate draft for today</button>
+      <button id="btnCopy" class="btn" disabled>Copy report</button>
+      <button id="btnPdf" class="btn" disabled>Export PDF</button>
+    </div>
+  </header>
+
+  <section id="statusPanel" class="status-panel hidden">
+    <h2>Source status</h2>
+    <div id="statusGrid" class="status-grid"></div>
+  </section>
+
+  <main id="workspace" class="workspace hidden">
+    <section class="editor">
+      <h2>Editable draft</h2>
+
+      <div class="block">
+        <h3>Key Takeaways</h3>
+        <p class="hint">Analyst-style insights (not a restatement of the tables). One bullet per line.</p>
+        <textarea id="nTakeaways" rows="8"></textarea>
+      </div>
+
+      <div class="block">
+        <h3>Market Snapshot</h3>
+        <div id="tblSnapshot" class="table-edit"></div>
+      </div>
+      <div class="block">
+        <h3>Global Markets</h3>
+        <div id="tblGlobal" class="table-edit"></div>
+      </div>
+      <div class="block">
+        <h3>Sectors Trending Today</h3>
+        <div id="tblSectors" class="table-edit"></div>
+      </div>
+      <div class="block">
+        <h3>Top Gainers - NIFTY 50</h3>
+        <div id="tblGainers" class="table-edit"></div>
+      </div>
+      <div class="block">
+        <h3>Top Losers - NIFTY 50</h3>
+        <div id="tblLosers" class="table-edit"></div>
+      </div>
+
+      <div class="block">
+        <h3>Advances / Declines</h3>
+        <div class="ad-edit">
+          <label>Advance <input id="adAdvance" type="number" /></label>
+          <label>Decline <input id="adDecline" type="number" /></label>
+          <label>A/D ratio <input id="adRatio" type="number" step="0.01" /></label>
+        </div>
+        <textarea id="adNote" rows="2" placeholder="Optional note"></textarea>
+      </div>
+
+      <div class="block">
+        <h3>News &amp; Updates</h3>
+        <p class="hint">Sources appear here for your reference only. They are excluded from the PDF preview and export.</p>
+        <div id="tblNews" class="table-edit"></div>
+      </div>
+
+      <div class="block">
+        <h3>Stocks in Focus</h3>
+        <p class="hint">Event-triggered Nifty 200 names only (news catalyst required). Count can vary by day.</p>
+        <div id="tblFocus" class="table-edit"></div>
+      </div>
+
+      <div class="block">
+        <h3>Commodity Market Watch</h3>
+        <div id="tblCommodities" class="table-edit"></div>
+      </div>
+    </section>
+
+    <section class="preview-pane">
+      <div class="preview-head">
+        <h2>Preview</h2>
+        <div class="preview-actions">
+          <span class="hint">Matches PDF layout</span>
+          <button id="btnCopyPreview" class="btn btn-small" disabled>Copy</button>
+        </div>
+      </div>
+      <article id="preview" class="preview"></article>
+    </section>
+  </main>
+
+  <div id="toast" class="toast hidden"></div>
+  <script src="/static/app.js?v=5"></script>
+</body>
+</html>
