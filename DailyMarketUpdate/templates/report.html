@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Daily Market Update - {{ report.date_label }}</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 18mm 16mm 18mm 16mm;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: "Georgia", "Times New Roman", serif;
+      color: #1a1a1a;
+      font-size: 11pt;
+      line-height: 1.45;
+    }
+    h1 {
+      font-size: 22pt;
+      margin: 0 0 2px 0;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+    }
+    .date {
+      font-size: 12pt;
+      margin-bottom: 16px;
+      color: #333;
+    }
+    h2 {
+      font-size: 13pt;
+      margin: 18px 0 8px 0;
+      border-bottom: 1.5px solid #222;
+      padding-bottom: 3px;
+    }
+    h3 {
+      font-size: 11.5pt;
+      margin: 12px 0 6px 0;
+      font-weight: 700;
+    }
+    ul {
+      margin: 0 0 8px 0;
+      padding-left: 18px;
+    }
+    li { margin-bottom: 5px; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 6px 0 12px 0;
+      font-size: 10.5pt;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 6px 8px;
+      text-align: left;
+    }
+    th {
+      background: #f3f3f3;
+      font-weight: 700;
+    }
+    .up { color: #0a7a32; font-weight: 600; }
+    .down { color: #b00020; font-weight: 600; }
+    .flat { color: #444; }
+    .ad-block {
+      margin: 6px 0 12px 0;
+      padding: 8px 10px;
+      background: #fafafa;
+      border: 1px solid #ddd;
+    }
+    .ad-block p { margin: 2px 0; }
+    .two-col {
+      width: 100%;
+    }
+    .note {
+      font-size: 9.5pt;
+      color: #555;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <h1>Daily Market Update</h1>
+  <div class="date">{{ report.date_label }}</div>
+
+  <h2>Key Takeaways</h2>
+  <ul>
+    {% for bullet in report.narrative.key_takeaways %}
+      <li>{{ bullet }}</li>
+    {% endfor %}
+  </ul>
+
+  <h2>Market Snapshot</h2>
+  <table>
+    <thead>
+      <tr><th>Index</th><th>Close</th><th>Change</th></tr>
+    </thead>
+    <tbody>
+      {% for row in report.market_snapshot %}
+      <tr>
+        <td>{{ row.name }}</td>
+        <td>{{ row.close }}</td>
+        <td class="{{ row.direction }}">{{ row.change }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h2>Global Markets</h2>
+  <table>
+    <thead>
+      <tr><th>Name</th><th>Level</th><th>Change</th></tr>
+    </thead>
+    <tbody>
+      {% for row in report.global_markets %}
+      <tr>
+        <td>{{ row.name }}</td>
+        <td>{{ row.close }}</td>
+        <td class="{{ row.direction }}">{{ row.change }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h2>Sectors Trending Today</h2>
+  <table>
+    <thead>
+      <tr><th>Sector</th><th>Change</th></tr>
+    </thead>
+    <tbody>
+      {% for row in report.sectors %}
+      <tr>
+        <td>{{ row.name }}</td>
+        <td class="{{ row.direction }}">{{ row.change }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h2>Top Gainers - NIFTY 50</h2>
+  <table>
+    <thead>
+      <tr><th>Company</th><th>Price</th><th>Change</th></tr>
+    </thead>
+    <tbody>
+      {% for row in report.gainers %}
+      <tr>
+        <td>{{ row.company }}</td>
+        <td>{{ row.price }}</td>
+        <td class="{{ row.direction }}">{{ row.change }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h2>Top Losers - NIFTY 50</h2>
+  <table>
+    <thead>
+      <tr><th>Company</th><th>Price</th><th>Change</th></tr>
+    </thead>
+    <tbody>
+      {% for row in report.losers %}
+      <tr>
+        <td>{{ row.company }}</td>
+        <td>{{ row.price }}</td>
+        <td class="{{ row.direction }}">{{ row.change }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h2>Advances / Declines</h2>
+  <div class="ad-block">
+    <p>Advance - {{ report.advances_declines.advance if report.advances_declines.advance is not none else '-' }}</p>
+    <p>Decline - {{ report.advances_declines.decline if report.advances_declines.decline is not none else '-' }}</p>
+    <p>A/D ratio: {{ report.advances_declines.ratio if report.advances_declines.ratio is not none else '-' }}</p>
+    {% if report.advances_declines.note %}
+      <p class="note">{{ report.advances_declines.note }}</p>
+    {% endif %}
+  </div>
+
+  <h2>News &amp; Updates</h2>
+  <ul>
+    {% for item in report.narrative.news_updates %}
+      <li>{{ item.text }}</li>
+    {% endfor %}
+  </ul>
+
+  <h2>Stocks in Focus</h2>
+  <table>
+    <thead>
+      <tr><th>Stock</th><th>Move</th><th>What's Happening</th></tr>
+    </thead>
+    <tbody>
+      {% for row in report.stocks_in_focus %}
+      <tr>
+        <td>{{ row.stock }}</td>
+        <td class="{{ row.direction }}">{{ row.move }}</td>
+        <td>{{ row.whats_happening }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h2>Commodity Market Watch</h2>
+  <table>
+    <thead>
+      <tr><th>Commodity</th><th>Price</th><th>1-Day Change</th></tr>
+    </thead>
+    <tbody>
+      {% for row in report.commodities %}
+      <tr>
+        <td>{{ row.commodity }}</td>
+        <td>{{ row.price }}</td>
+        <td class="{{ row.direction }}">{{ row.change }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</body>
+</html>
